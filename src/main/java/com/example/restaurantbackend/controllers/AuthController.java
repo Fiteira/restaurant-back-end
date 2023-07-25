@@ -1,8 +1,8 @@
 package com.example.restaurantbackend.controllers;
 
-import com.example.restaurantbackend.domain.user.AuthenticationDTO;
-import com.example.restaurantbackend.domain.user.LoginResponseDTO;
-import com.example.restaurantbackend.domain.user.RegisterDTO;
+import com.example.restaurantbackend.domain.DTO.userDTO.AuthenticationDTO;
+import com.example.restaurantbackend.domain.DTO.userDTO.LoginResponseDTO;
+import com.example.restaurantbackend.domain.DTO.userDTO.RegisterDTO;
 import com.example.restaurantbackend.domain.user.User;
 import com.example.restaurantbackend.repository.UserRepository;
 import com.example.restaurantbackend.security.TokenService;
@@ -19,14 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
+
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+    }
 
     /**
      * Method to post login
@@ -44,15 +47,22 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    @PostMapping("/resgister")
+    /**
+     * Method to post register
+     *
+     * @param data
+     * @return
+     */
+    @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterDTO data) {
         if (this.userRepository.findByName(data.name()).isPresent()) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        var newUser = User.UserBuilder()
-                                        .name(data.name())
+
+        var newUser = User.UserBuilder().name(data.name())
                                         .password(encryptedPassword)
                                         .role(data.role());
+
         this.userRepository.save(newUser);
 
         return ResponseEntity.ok().build();

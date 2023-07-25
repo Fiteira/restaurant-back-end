@@ -18,6 +18,11 @@ public class TokenService {
     @Value("${jwt.secret}")
     private String secret;
 
+    /**
+     * This method is used to generate a token for the user
+     * @param user
+     * @return token
+     */
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -33,10 +38,19 @@ public class TokenService {
         }
     }
 
+    /**
+     * This method is used to get the expiration time of the token
+     * @return expiration time
+     */
     private Instant getExpirationTime() {
         return LocalDateTime.now().plusHours(4).toInstant(ZoneOffset.UTC);
     }
 
+    /**
+     * This method is used to validate the token
+     * @param token
+     * @return user name
+     */
     public String validateToken(String token){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

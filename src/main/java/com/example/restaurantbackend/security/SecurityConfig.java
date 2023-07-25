@@ -21,6 +21,12 @@ public class SecurityConfig {
     @Autowired
     SecurityFilter securityFilter;
 
+    /**
+     * This method is used to configure the security filter chain
+     * @param httpSecurity
+     * @return SecurityFilterChain
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -37,11 +43,21 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * This method is used to configure the authentication manager
+     * @param authenticationCongiguration
+     * @return AuthenticationManager
+     * @throws Exception
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationCongiguration) throws Exception {
         return authenticationCongiguration.getAuthenticationManager();
     }
 
+    /**
+     * This method is used to configure the password encoder
+     * @return PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

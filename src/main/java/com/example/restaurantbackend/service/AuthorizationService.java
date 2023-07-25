@@ -10,18 +10,32 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorizationService implements UserDetailsService {
 
-    @Autowired
+    final
     UserRepository repository;
+
+    /**
+     * Constructor
+     * @param repository
+     */
+    public AuthorizationService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     /**
      * Method to load user by username
      * @param username
-     * @return
+     * @return UserDetails
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        return repository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDetails user = repository.findByName(username).orElse(null);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return user;
     }
 
 }

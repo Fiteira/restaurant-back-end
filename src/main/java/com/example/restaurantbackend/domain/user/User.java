@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
 @Entity(name = "users")
 public class User implements UserDetails {
 
@@ -16,26 +15,26 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
     private UserRole role;
 
+    /**
+     * Get user authorities according to their role
+     * @return user authorities collection
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.ADMIN)
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_CHEF"), new SimpleGrantedAuthority("ROLE_WAITER"));
         else if (this.role == UserRole.CHEF) return List.of(new SimpleGrantedAuthority("ROLE_CHEF"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_WAITER"));
+        else if (this.role == UserRole.WAITER) return List.of(new SimpleGrantedAuthority("ROLE_WAITER"));
+        else return null;
     }
 
-    public String getPassword() {
-        return password;
-    }
+
 
     @Override
     public String getUsername() {
@@ -76,7 +75,6 @@ public class User implements UserDetails {
      * @param name user name
      * @return user with name
      */
-
     public User name(String name) {
         this.name = name;
         return this;
@@ -88,7 +86,6 @@ public class User implements UserDetails {
      * @param password user password
      * @return user with password
      */
-
     public User password(String password) {
         this.password = password;
         return this;
@@ -100,7 +97,6 @@ public class User implements UserDetails {
      * @param role user role
      * @return user with role
      */
-
     public User role(UserRole role) {
         this.role = role;
         return this;
@@ -134,12 +130,21 @@ public class User implements UserDetails {
     }
 
     /**
-     * Set User Name
+     * Set UserName
      *
      * @param name user name
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Get User Password
+     *
+     * @return user password
+     */
+    public String getPassword() {
+        return password;
     }
 
     /**

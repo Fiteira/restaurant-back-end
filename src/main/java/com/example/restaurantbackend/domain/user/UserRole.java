@@ -5,14 +5,14 @@ public enum UserRole {
     CHEF("chef"),
     WAITER("waiter");
 
-    private String role;
+    private final String role;
 
 
     /**
      * Constructor for UserRole
-     * @param role
+     * requires role as String
      */
-    UserRole(String role) {
+    UserRole(final String role) {
         this.role = role;
     }
 
