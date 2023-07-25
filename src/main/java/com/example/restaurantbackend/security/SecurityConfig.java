@@ -1,6 +1,5 @@
 package com.example.restaurantbackend.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -8,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,23 +18,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    SecurityFilter securityFilter;
+    final SecurityFilter securityFilter;
+
+    public SecurityConfig(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
 
     /**
      * This method is used to configure the security filter chain
-     * @param httpSecurity
+     * @param httpSecurity HttpSecurity
      * @return SecurityFilterChain
-     * @throws Exception
+     * @throws Exception Exception
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/register").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST).permitAll()
                         .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -45,13 +48,13 @@ public class SecurityConfig {
 
     /**
      * This method is used to configure the authentication manager
-     * @param authenticationCongiguration
+     * @param authenticationConfiguration AuthenticationConfiguration
      * @return AuthenticationManager
-     * @throws Exception
+     * @throws Exception Exception
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationCongiguration) throws Exception {
-        return authenticationCongiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     /**

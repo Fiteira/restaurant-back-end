@@ -3,46 +3,43 @@ package com.example.restaurantbackend.controllers;
 import com.example.restaurantbackend.domain.DTO.userDTO.AuthenticationDTO;
 import com.example.restaurantbackend.domain.DTO.userDTO.LoginResponseDTO;
 import com.example.restaurantbackend.domain.DTO.userDTO.RegisterDTO;
-import com.example.restaurantbackend.domain.user.User;
-import com.example.restaurantbackend.repository.UserRepository;
-import com.example.restaurantbackend.security.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.restaurantbackend.service.UserService;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 
 @RestController
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    private final TokenService tokenService;
-
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService) {
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-        this.tokenService = tokenService;
+    /**
+     * Constructor AuthController
+     *
+     * @param userService UserService
+     */
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     /**
      * Method to post login
      *
-     * @param data
-     * @return
+     * @param data AuthenticationDTO
+     * @return ResponseEntity
      */
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationDTO data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.name(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+    @PermitAll
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data) {
+        String token = userService.GetToken(data);
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
@@ -50,20 +47,13 @@ public class AuthController {
     /**
      * Method to post register
      *
-     * @param data
-     * @return
+     * @param data RegisterDTO
+     * @return ResponseEntity
      */
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterDTO data) {
-        if (this.userRepository.findByName(data.name()).isPresent()) return ResponseEntity.badRequest().build();
+    public ResponseEntity<BCryptPasswordEncoder> register(@RequestBody RegisterDTO data) {
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-
-        var newUser = User.UserBuilder().name(data.name())
-                                        .password(encryptedPassword)
-                                        .role(data.role());
-
-        this.userRepository.save(newUser);
+        if (Objects.equals(userService.CreateUser(data), "badRequest")) return ResponseEntity.badRequest().build();
 
         return ResponseEntity.ok().build();
     }
