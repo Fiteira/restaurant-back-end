@@ -110,14 +110,6 @@ public class User implements UserDetails {
         return id;
     }
 
-    /**
-     * Set User ID
-     *
-     * @param id user id
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
 
     /**
      * Get Username
@@ -169,7 +161,7 @@ public class User implements UserDetails {
      *
      * @param role user role
      */
-    public void setRole(String role) {
-        this.role = UserRole.valueOf(role);
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }
