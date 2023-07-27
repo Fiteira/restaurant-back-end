@@ -19,19 +19,18 @@ public class TokenService {
 
     /**
      * This method is used to generate a token for the user
-     * @param user
+     * @param user User
      * @return token
      */
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer("auth0")
                     .withSubject(user.getName())
                     .withSubject(user.getRole())
                     .withExpiresAt(getExpirationTime())
                     .sign(algorithm);
-            return token;
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error generating token", exception);
         }
@@ -47,7 +46,7 @@ public class TokenService {
 
     /**
      * This method is used to validate the token
-     * @param token
+     * @param token token
      * @return user name
      */
     public String validateToken(String token){

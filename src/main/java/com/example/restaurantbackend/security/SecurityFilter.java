@@ -8,9 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -22,8 +24,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     /**
      * Constructor for SecurityFilter
-     * @param tokenService
-     * @param userRepository
+     * @param tokenService TokenService
+     * @param userRepository UserRepository
      */
     public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
         this.tokenService = tokenService;
@@ -32,11 +34,11 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     /**
      * This method is used to filter the requests and validate the token
-     * @param request
-     * @param response
-     * @param filterChain
-     * @throws ServletException
-     * @throws IOException
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param filterChain FilterChain
+     * @throws ServletException ServletException
+     * @throws IOException IOException
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -44,17 +46,20 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if(token != null && !token.isEmpty()) {
             var name = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByName(name).orElseThrow(() -> new RuntimeException("User not found"));
-
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Optional<UserDetails> user = userRepository.findByName(name);
+            if (user.isPresent()) {
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.get().getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                throw new UsernameNotFoundException("User not found with the given name");
+            }
         }
         filterChain.doFilter(request, response);
     }
 
     /**
      * This method is used to recover the token from the request
-     * @param  request
+     * @param  request HttpServletRequest
      * @return token
      */
     private String recoverToken(HttpServletRequest request) {

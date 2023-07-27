@@ -14,7 +14,7 @@ public class AuthorizationService implements UserDetailsService {
 
     /**
      * Constructor
-     * @param repository
+     * @param repository UserRepository
      */
     public AuthorizationService(UserRepository repository) {
         this.repository = repository;
@@ -22,9 +22,9 @@ public class AuthorizationService implements UserDetailsService {
 
     /**
      * Method to load user by username
-     * @param username
+     * @param username String
      * @return UserDetails
-     * @throws UsernameNotFoundException
+     * @throws UsernameNotFoundException UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

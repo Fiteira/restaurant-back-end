@@ -36,11 +36,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST,"/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/register").hasRole("ADMIN")
+                        //.requestMatchers(HttpMethod.POST,"/login").permitAll()
+                        //.requestMatchers(HttpMethod.POST,"/register").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET).permitAll()
                         .requestMatchers(HttpMethod.POST).permitAll()
-                        .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.PUT).permitAll()
+                        //.requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
+                        //.anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
