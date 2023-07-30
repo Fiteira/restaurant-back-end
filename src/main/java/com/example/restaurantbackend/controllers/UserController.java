@@ -60,7 +60,11 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+
+        if(userService.getAllUsers().isEmpty()) return ResponseEntity.badRequest().build();
+
         return ResponseEntity.ok(userService.getAllUsers());
+
     }
 }

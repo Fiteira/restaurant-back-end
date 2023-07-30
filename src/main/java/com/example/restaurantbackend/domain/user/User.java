@@ -69,6 +69,18 @@ public class User implements UserDetails {
     }
 
     /**
+     * Builder User for id
+     *
+     * @param id user id
+     * @return user with id
+     */
+    public User id(String id) {
+        this.id = id;
+        return this;
+    }
+
+
+    /**
      * Builder User for name
      *
      * @param name user name

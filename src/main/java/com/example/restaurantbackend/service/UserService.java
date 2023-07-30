@@ -90,9 +90,15 @@ public class UserService {
 
     }
 
+    /**
+     * Method to get all users
+     *
+     * @return List<UserDTO> Users DTO
+     */
+    public List<UserDTO> getAllUsers() {
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+       return (UserDTO.fromUserList(this.userRepository.findAll()));
+
     }
 
     /**
