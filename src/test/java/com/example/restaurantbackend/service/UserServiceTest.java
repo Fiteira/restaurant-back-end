@@ -7,13 +7,13 @@ import com.example.restaurantbackend.domain.DTO.userDTO.UserDTO;
 import com.example.restaurantbackend.domain.user.User;
 import com.example.restaurantbackend.repository.UserRepository;
 import com.example.restaurantbackend.security.TokenService;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @InjectMocks
@@ -60,7 +60,7 @@ public class UserServiceTest {
         String actualToken = userService.getToken(data);
 
         //Then
-        Assert.assertEquals(expectedToken, actualToken);
+        Assertions.assertEquals(expectedToken, actualToken);
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(tokenService).generateToken(userDetails);
 
@@ -78,7 +78,7 @@ public class UserServiceTest {
         String result = userService.createUser(userRegisterDTO);
 
         //Then
-        Assert.assertEquals("ok", result);
+        Assertions.assertEquals("ok", result);
         verify(userRepository).findByName(userRegisterDTO.name());
         verify(userRepository).save(any(User.class));
 
@@ -97,7 +97,7 @@ public class UserServiceTest {
         String result = userService.createUser(userRegisterDTO);
 
         //Then
-        Assert.assertEquals("badRequest", result);
+        Assertions.assertEquals("badRequest", result);
         verify(userRepository).findByName(userRegisterDTO.name());
         verify(userRepository, never()).save(any(User.class));
 
@@ -117,10 +117,10 @@ public class UserServiceTest {
         Optional<UserDTO> result = userService.getUser(id);
 
         //Then
-        Assert.assertTrue(result.isPresent());
-        Assert.assertEquals(id, result.get().id());
-        Assert.assertEquals("name", result.get().name());
-        Assert.assertEquals("admin", result.get().role());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(id, result.get().id());
+        Assertions.assertEquals("name", result.get().name());
+        Assertions.assertEquals("admin", result.get().role());
 
     }
 
@@ -137,7 +137,7 @@ public class UserServiceTest {
         Optional<UserDTO> result = userService.getUser(id);
 
         //Then
-        Assert.assertFalse(result.isPresent());
+        Assertions.assertFalse(result.isPresent());
 
     }
 
@@ -159,19 +159,19 @@ public class UserServiceTest {
 
 
         // Then
-        Assert.assertEquals(3, result.size());
+        Assertions.assertEquals(3, result.size());
 
-        Assert.assertEquals("1L", result.get(0).id());
-        Assert.assertEquals("name", result.get(0).name());
-        Assert.assertEquals("admin", result.get(0).role());
+        Assertions.assertEquals("1L", result.get(0).id());
+        Assertions.assertEquals("name", result.get(0).name());
+        Assertions.assertEquals("admin", result.get(0).role());
 
-        Assert.assertEquals("2L", result.get(1).id());
-        Assert.assertEquals("name2", result.get(1).name());
-        Assert.assertEquals("chef", result.get(1).role());
+        Assertions.assertEquals("2L", result.get(1).id());
+        Assertions.assertEquals("name2", result.get(1).name());
+        Assertions.assertEquals("chef", result.get(1).role());
 
-        Assert.assertEquals("3L", result.get(2).id());
-        Assert.assertEquals("name3", result.get(2).name());
-        Assert.assertEquals("waiter", result.get(2).role());
+        Assertions.assertEquals("3L", result.get(2).id());
+        Assertions.assertEquals("name3", result.get(2).name());
+        Assertions.assertEquals("waiter", result.get(2).role());
 
     }
 
@@ -187,7 +187,7 @@ public class UserServiceTest {
         List<UserDTO> result = userService.getAllUsers();
 
         // Then
-        Assert.assertEquals(0, result.size());
+        Assertions.assertEquals(0, result.size());
 
     }
 
@@ -206,10 +206,10 @@ public class UserServiceTest {
         Optional<UserDTO> result = userService.editUser(id, userGive);
 
         //Then
-        Assert.assertTrue(result.isPresent());
-        Assert.assertEquals(id, result.get().id());
-        Assert.assertEquals("admin", result.get().name());
-        Assert.assertEquals("admin", result.get().role());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(id, result.get().id());
+        Assertions.assertEquals("admin", result.get().name());
+        Assertions.assertEquals("admin", result.get().role());
 
         verify(userRepository).save(user);
     }
@@ -227,7 +227,7 @@ public class UserServiceTest {
         Optional<UserDTO> result = userService.editUser(id, userGive);
 
         // Then
-        Assert.assertTrue(result.isEmpty());
+        Assertions.assertTrue(result.isEmpty());
 
 
         verify(userRepository, never()).save(Mockito.any(User.class));
