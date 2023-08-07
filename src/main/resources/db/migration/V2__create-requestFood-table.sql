@@ -20,7 +20,8 @@ name TEXT NOT NULL,
 ingredients TEXT NOT NULL,
 type TEXT NOT NULL,
 restriction TEXT NOT NULL,
-price FLOAT NOT NULL
+price FLOAT NOT NULL,
+image TEXT NOT NULL
 );
 
 CREATE TABLE requestMenu(

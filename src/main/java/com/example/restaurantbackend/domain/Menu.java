@@ -23,6 +23,8 @@ public class Menu {
 
     private float price;
 
+    private String image;
+
 
     /**
      * Empty constructor to create a new Menu object configured with Builder pattern
@@ -61,13 +63,15 @@ public class Menu {
         return this;
     }
 
+    public Menu image(String image) {
+        this.image = image;
+        return this;
+    }
+
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -107,5 +111,13 @@ public class Menu {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
