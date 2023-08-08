@@ -6,7 +6,15 @@ import com.example.restaurantbackend.domain.DTO.userDTO.UserDTO;
 import com.example.restaurantbackend.domain.user.User;
 import com.example.restaurantbackend.domain.user.UserRole;
 
+import java.util.List;
+
 public class DataExample {
+
+    private final List<UserDTO> userDTOList = List.of(
+                    new UserDTO("1L", "name", "ADMIN"),
+                    new UserDTO("2L", "name2", "CHEF"),
+                    new UserDTO("3L", "name3", "WAITER")
+    );
 
     public User userAdmin() {
         return new User()
@@ -45,5 +53,9 @@ public class DataExample {
         return new RegisterDTO("admin", "admin", UserRole.ADMIN);
     }
 
+
+    public List<UserDTO> getUserDTOList() {
+        return userDTOList;
+    }
 
 }

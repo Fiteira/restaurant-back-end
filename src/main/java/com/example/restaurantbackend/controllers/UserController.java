@@ -20,7 +20,6 @@ public class UserController {
      *
      * @param userService UserService
      */
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
