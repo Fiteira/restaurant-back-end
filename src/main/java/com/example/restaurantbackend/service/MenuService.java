@@ -5,12 +5,8 @@ import com.example.restaurantbackend.domain.DTO.MenuDTO;
 import com.example.restaurantbackend.domain.Menu;
 import com.example.restaurantbackend.repository.MenuRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-
-
 
 @Service
-@Validated
 public class MenuService {
 
     private final MenuRepository menuRepository;
