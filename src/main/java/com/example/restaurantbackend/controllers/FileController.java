@@ -17,7 +17,7 @@ public class FileController {
 
     public FileController(FileUploadInterface fileUpload) {this.fileUpload = fileUpload;}
 
-    private static final long MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
+    private static final long MAX_FILE_SIZE_BYTES = 10L * 1024 * 1024; // 10 MB
 
 
     @PostMapping("/upload")
