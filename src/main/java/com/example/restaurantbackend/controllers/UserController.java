@@ -2,7 +2,6 @@ package com.example.restaurantbackend.controllers;
 
 import com.example.restaurantbackend.domain.DTO.userDTO.RegisterDTO;
 import com.example.restaurantbackend.domain.DTO.userDTO.UserDTO;
-import com.example.restaurantbackend.domain.user.User;
 import com.example.restaurantbackend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ public class UserController {
      *
      * @param userService UserService
      */
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
