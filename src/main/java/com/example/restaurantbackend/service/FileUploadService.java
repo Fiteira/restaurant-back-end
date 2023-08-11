@@ -1,6 +1,7 @@
 package com.example.restaurantbackend.service;
 
 import com.cloudinary.Cloudinary;
+import com.example.restaurantbackend.repository.FileUploadInterface;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

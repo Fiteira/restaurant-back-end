@@ -1,7 +1,7 @@
 package com.example.restaurantbackend.controllers;
 
 
-import com.example.restaurantbackend.service.FileUploadInterface;
+import com.example.restaurantbackend.repository.FileUploadInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

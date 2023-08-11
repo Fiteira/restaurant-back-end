@@ -10,8 +10,7 @@ public class Menu {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    private Long id;
 
     private String name;
 
@@ -33,7 +32,7 @@ public class Menu {
         return new Menu();
     }
 
-    public Menu id(int id) {
+    public Menu id(Long id) {
         this.id = id;
         return this;
     }
@@ -68,7 +67,7 @@ public class Menu {
         return this;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

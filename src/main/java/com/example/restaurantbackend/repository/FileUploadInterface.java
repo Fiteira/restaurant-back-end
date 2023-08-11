@@ -1,4 +1,4 @@
-package com.example.restaurantbackend.service;
+package com.example.restaurantbackend.repository;
 
 import org.springframework.web.multipart.MultipartFile;
 
