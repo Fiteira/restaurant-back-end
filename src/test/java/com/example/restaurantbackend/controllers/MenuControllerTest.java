@@ -91,7 +91,6 @@ public class MenuControllerTest {
 
         //Given
         Long menuId = dataExample.getMenuDTO().id();
-        MenuDTO menuDTO = dataExample.getMenuDTO();
 
         //When
         Mockito.when(menuService.getMenuById(menuId))
@@ -126,9 +125,6 @@ public class MenuControllerTest {
 
     @Test
     public void getAllMenuBadRequest() {
-
-        //Given
-        List<MenuDTO> listMenuDTO = dataExample.getMenuDTOList();
 
         //When
         Mockito.when(menuService.getAllMenu())
@@ -170,7 +166,6 @@ public class MenuControllerTest {
         //Given
         Long menuId = dataExample.getMenuDTO().id();
         MenuDTO menuDTOtoEdit = dataExample.getMenuDTO();
-        MenuDTO menuDTO = dataExample.getMenuDTO();
 
         //When
         Mockito.when(menuService.editMenu(menuId, menuDTOtoEdit))
