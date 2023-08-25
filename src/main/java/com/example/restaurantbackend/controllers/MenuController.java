@@ -2,12 +2,11 @@ package com.example.restaurantbackend.controllers;
 
 import com.example.restaurantbackend.domain.DTO.MenuDTO;
 import com.example.restaurantbackend.service.MenuService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -15,16 +14,16 @@ public class MenuController {
 
     MenuService menuService;
 
-    @Autowired
+
     public MenuController(MenuService menuService) {
         this.menuService = menuService;
     }
 
     @PostMapping("/menu")
-    public ResponseEntity<MenuDTO> getMenu(@RequestBody MenuDTO menuDTO) {
+    public ResponseEntity<MenuDTO> createMenu(@RequestBody MenuDTO menuDTO) {
 
 
-        if (verification(menuDTO) == null) {
+        if (menuService.verification(menuDTO) == null) {
             return ResponseEntity.badRequest().body(menuDTO);
         }
 
@@ -33,26 +32,40 @@ public class MenuController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMenuDTO);
     }
 
+    @GetMapping("/menu/{menuId}")
+    public ResponseEntity<MenuDTO> getMenuById(@PathVariable final Long menuId) {
 
-    public MenuDTO verification(MenuDTO menuDTO) {
-        if (menuDTO.name() == null || menuDTO.name().isEmpty()) {
-            return null;
+        MenuDTO menuDTO = menuService.getMenuById(menuId);
+
+        if (menuDTO == null) {
+            return ResponseEntity.badRequest().build();
         }
-        if (menuDTO.ingredients() == null || menuDTO.ingredients().isEmpty()) {
-            return null;
-        }
-        if (menuDTO.type() == null || menuDTO.type().isEmpty()) {
-            return null;
-        }
-        if (menuDTO.restriction() == null || menuDTO.restriction().isEmpty()) {
-            return null;
-        }
-        if (menuDTO.price() == 0 || menuDTO.price() < 0) {
-            return null;
-        }
-        if (menuDTO.image() == null || menuDTO.image().isEmpty()) {
-            return null;
-        }
-        return menuDTO;
+
+        return ResponseEntity.ok(menuDTO);
     }
+
+    @GetMapping("/menu")
+    public ResponseEntity<List<MenuDTO>> getAllMenu() {
+
+        List<MenuDTO> menuDTO = menuService.getAllMenu();
+
+        if (menuDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(menuDTO);
+    }
+
+    @PutMapping("/menu/{menuId}")
+    public ResponseEntity<MenuDTO> editMenu(@PathVariable final Long menuId, @RequestBody MenuDTO menuDTOtoEdit) {
+
+        MenuDTO menuDTO = menuService.editMenu(menuId, menuDTOtoEdit);
+
+        if (menuDTO == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(menuDTO);
+    }
+
 }
