@@ -47,13 +47,13 @@ public class MenuController {
     @GetMapping("/menu")
     public ResponseEntity<List<MenuDTO>> getAllMenu() {
 
-        List<MenuDTO> menuDTO = menuService.getAllMenu();
+        List<MenuDTO> menuDTOList = menuService.getAllMenu();
 
-        if (menuDTO == null) {
+        if (menuDTOList == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(menuDTO);
+        return ResponseEntity.ok(menuDTOList);
     }
 
     @PutMapping("/menu/{menuId}")

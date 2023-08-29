@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 @Entity(name = "tableFood")
 public class TableFood {
     @Id
-    private int id;
+    private Long id;
 
     private int positionX;
 
@@ -20,7 +20,7 @@ public class TableFood {
         return new TableFood();
     }
 
-    public TableFood id(int id) {
+    public TableFood id(Long id) {
         this.id = id;
         return this;
     }
@@ -35,11 +35,11 @@ public class TableFood {
         return this;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

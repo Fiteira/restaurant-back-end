@@ -11,7 +11,7 @@ public class RequestFood {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -43,7 +43,7 @@ public class RequestFood {
      * @param id user id
      * @return user with id
      */
-    public RequestFood id(int id) {
+    public RequestFood id(Long id) {
         this.id = id;
         return this;
     }
@@ -86,7 +86,7 @@ public class RequestFood {
      *
      * @return RequestFood id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -95,7 +95,7 @@ public class RequestFood {
      *
      * @param id RequestFood id
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
